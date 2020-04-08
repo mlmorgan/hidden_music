@@ -16,10 +16,14 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   var artistName = 'No artist';
+  var imageUrl = '';
+  var spotifyUrl = '';
   void _getArtist(String genre) async {
     final artist = await SpotifyHelper.getArtist(genre.toLowerCase());
     setState(() {
       artistName = artist.name;
+      imageUrl = artist.imageURL;
+      spotifyUrl = artist.spotifyURL;
     });
   }
 
@@ -52,8 +56,13 @@ class _HomeScreenState extends State<HomeScreen> {
                 padding: const EdgeInsets.all(16),
               ),
             ),
-            ArtistView(
-              name: artistName,
+            Container(
+              margin: const EdgeInsets.only(top: 16),
+              child: ArtistView(
+                name: artistName,
+                imageURL: imageUrl,
+                spotifyURL: spotifyUrl,
+              ),
             ),
           ],
         ),

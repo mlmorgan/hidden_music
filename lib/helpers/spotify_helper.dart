@@ -11,7 +11,7 @@ import '../models/artist.dart';
 class SpotifyHelper {
   static Future<Artist> getArtist(String genre) async {
     final random = new Random();
-    final offset = random.nextInt(100);
+    final offset = random.nextInt(50);
     final accessToken = await _getAccessToken();
     final url =
         'https://api.spotify.com/v1/search?q=genre%3A$genre%20tag%3Ahipster&type=artist&limit=1&offset=$offset';
