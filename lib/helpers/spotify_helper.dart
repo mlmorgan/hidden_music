@@ -6,19 +6,27 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'auth_helper.dart' as auth;
 import '../models/access_token.dart';
+import '../models/artist.dart';
 
 class SpotifyHelper {
-  static void getArtist(String genre) async {
-    var random = new Random();
-    var offset = random.nextInt(100);
-    var accessToken = await _getAccessToken();
-    var url =
+  static Future<Artist> getArtist(String genre) async {
+    final random = new Random();
+    final offset = random.nextInt(100);
+    final accessToken = await _getAccessToken();
+    final url =
         'https://api.spotify.com/v1/search?q=genre%3A$genre%20tag%3Ahipster&type=artist&limit=1&offset=$offset';
 
-    var response =
+    final response =
         await http.get(url, headers: {'Authorization': 'Bearer $accessToken'});
     print('Response status: ${response.statusCode}');
     print('Response body: ${response.body}');
+
+    final artist = json.decode(response.body)['artists']['items'][0];
+    return Artist(
+      name: artist['name'],
+      imageURL: artist['images'][0]['url'],
+      spotifyURL: artist['external_urls']['spotify'],
+    );
   }
 
   static Future<String> _getAccessToken() async {
