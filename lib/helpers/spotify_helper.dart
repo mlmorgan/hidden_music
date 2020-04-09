@@ -9,24 +9,27 @@ import '../models/access_token.dart';
 import '../models/artist.dart';
 
 class SpotifyHelper {
-  static Future<Artist> getArtist(String genre) async {
+  static Future<List<Artist>> getArtists(String genre) async {
     final random = new Random();
-    final offset = random.nextInt(50);
+    final offset = 0; //random.nextInt(50);
     final accessToken = await _getAccessToken();
     final url =
-        'https://api.spotify.com/v1/search?q=genre%3A$genre%20tag%3Ahipster&type=artist&limit=1&offset=$offset';
+        'https://api.spotify.com/v1/search?q=genre%3A$genre%20tag%3Ahipster&type=artist&limit=10&offset=$offset';
 
     final response =
         await http.get(url, headers: {'Authorization': 'Bearer $accessToken'});
     print('Response status: ${response.statusCode}');
     print('Response body: ${response.body}');
 
-    final artist = json.decode(response.body)['artists']['items'][0];
-    return Artist(
-      name: artist['name'],
-      imageURL: artist['images'][0]['url'],
-      spotifyURL: artist['external_urls']['spotify'],
-    );
+    List artists = json.decode(response.body)['artists']['items'];
+
+    return artists
+        .map((artist) => Artist(
+              name: artist['name'],
+              imageURL: artist['images'][0]['url'],
+              spotifyURL: artist['external_urls']['spotify'],
+            ))
+        .toList();
   }
 
   static Future<String> _getAccessToken() async {

@@ -6,6 +6,7 @@ import '../widgets/genre_selector.dart';
 import '../providers/genres.dart';
 import '../widgets/artist_view.dart';
 import '../models/artist.dart';
+import '../widgets/artists_list.dart';
 
 class HomeScreen extends StatefulWidget {
   HomeScreen() {}
@@ -15,15 +16,12 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  var artistName = 'No artist';
-  var imageUrl = '';
-  var spotifyUrl = '';
-  void _getArtist(String genre) async {
-    final artist = await SpotifyHelper.getArtist(genre.toLowerCase());
+  List _artists;
+  void _getArtists(String genre) async {
+    final artists = await SpotifyHelper.getArtists(
+        genre.toLowerCase().replaceAll(' ', '-'));
     setState(() {
-      artistName = artist.name;
-      imageUrl = artist.imageURL;
-      spotifyUrl = artist.spotifyURL;
+      _artists = artists;
     });
   }
 
@@ -34,38 +32,30 @@ class _HomeScreenState extends State<HomeScreen> {
         title: Text('Hidden Music'),
       ),
       //backgroundColor: Theme.of(context).backgroundColor,
-      body: Container(
-        margin: EdgeInsets.all(16),
-        child: Column(
-          children: <Widget>[
-            GenreSelector(),
-            Consumer<Genres>(
-              builder: (ctx, genres, _) => RaisedButton(
-                onPressed: () {
-                  _getArtist(genres.currentGenre);
-                },
-                color: Theme.of(context).primaryColor,
-                child: Row(
-                  children: <Widget>[
-                    Text('Discover Hidden Artists'),
-                    Icon(Icons.library_music)
-                  ],
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                ),
-                textColor: Colors.white,
-                padding: const EdgeInsets.all(16),
-              ),
-            ),
-            Container(
-              margin: const EdgeInsets.only(top: 16),
-              child: ArtistView(
-                name: artistName,
-                imageURL: imageUrl,
-                spotifyURL: spotifyUrl,
-              ),
-            ),
-          ],
-        ),
+      body: Column(
+        children: <Widget>[
+          GenreSelector(getArtistsFnc: _getArtists),
+          // Consumer<Genres>(
+          //   builder: (ctx, genres, _) => RaisedButton(
+          //     onPressed: () {
+          //       _getArtist(genres.currentGenre);
+          //     },
+          //     color: Theme.of(context).primaryColor,
+          //     child: Row(
+          //       children: <Widget>[
+          //         Text('Discover Hidden Artists'),
+          //         Icon(Icons.library_music)
+          //       ],
+          //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          //     ),
+          //     textColor: Colors.white,
+          //     padding: const EdgeInsets.all(16),
+          //   ),
+          // ),
+          Expanded(
+            child: ArtistsList(_artists),
+          ),
+        ],
       ),
     );
   }
