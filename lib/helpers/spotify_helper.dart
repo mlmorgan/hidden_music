@@ -23,13 +23,23 @@ class SpotifyHelper {
 
     List artists = json.decode(response.body)['artists']['items'];
 
-    return artists
-        .map((artist) => Artist(
-              name: artist['name'],
-              imageURL: artist['images'][0]['url'],
-              spotifyURL: artist['external_urls']['spotify'],
-            ))
-        .toList();
+    return artists.map((artist) {
+      String image;
+      List<dynamic> images = artist['images'];
+
+      if (images.length > 0) {
+        image = artist['images'][0]['url'];
+      } else {
+        image =
+            "https://via.placeholder.com/640x640.png?text=No+artist+image+found";
+      }
+
+      return Artist(
+        name: artist['name'],
+        imageURL: image,
+        spotifyURL: artist['external_urls']['spotify'],
+      );
+    }).toList();
   }
 
   static Future<String> _getAccessToken() async {

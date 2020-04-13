@@ -6,37 +6,52 @@ class ArtistTile extends StatelessWidget {
   final imageURL;
   final spotifyURL;
 
-  void _launchSpotify(url) async {
-    if (await canLaunch(url)) {
-      await launch(url);
+  void _launchSpotify() async {
+    if (await canLaunch(spotifyURL)) {
+      await launch(spotifyURL);
     } else {
-      throw 'Could not launch $url';
+      throw 'Could not launch $spotifyURL';
     }
   }
 
-  ArtistTile({this.name, this.imageURL, this.spotifyURL});
+  ArtistTile({
+    @required this.name,
+    @required this.imageURL,
+    @required this.spotifyURL,
+  });
   @override
   Widget build(BuildContext context) {
-    return Container(
-      // child: Card(
-      child: ListTile(
-        onTap: () {
-          _launchSpotify(spotifyURL);
-        },
-        leading: CircleAvatar(
-          //radius: 40,
-          backgroundImage: NetworkImage(imageURL),
+    return GestureDetector(
+      onTap: _launchSpotify,
+      child: Card(
+        color: Colors.white,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
         ),
-        title: Text(
-          name,
-          style: TextStyle(
-              //fontSize: 30,
-              //fontWeight: FontWeight.bold,
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(10),
+          child: Column(
+            children: <Widget>[
+              Image.network(
+                imageURL,
+                alignment: Alignment.topCenter,
+                fit: BoxFit.contain,
               ),
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Text(
+                  name,
+                  style: TextStyle(
+                    fontSize: 50,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ],
+          ),
         ),
-        trailing: Icon(Icons.arrow_forward),
       ),
     );
-    // );
   }
 }

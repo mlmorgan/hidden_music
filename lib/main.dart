@@ -19,7 +19,7 @@ class MyApp extends StatelessWidget {
         title: 'Hidden Music',
         theme: ThemeData(
           primarySwatch: Colors.purple,
-          backgroundColor: Color.fromRGBO(20, 20, 20, 1),
+          backgroundColor: Color(0x121212),
         ),
         home: HomeScreen(),
       ),
