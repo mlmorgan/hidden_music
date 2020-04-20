@@ -60,15 +60,15 @@ class ArtistTile extends StatelessWidget {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
-                      FittedBox(
-                        child: Text(
-                          artist.name,
-                          style: TextStyle(
-                            fontSize: 40,
-                            fontWeight: FontWeight.bold,
-                          ),
-                          textAlign: TextAlign.left,
+                      Text(
+                        artist.name,
+                        maxLines: 2,
+                        overflow: TextOverflow.fade,
+                        style: TextStyle(
+                          fontSize: 40,
+                          fontWeight: FontWeight.bold,
                         ),
+                        textAlign: TextAlign.center,
                       ),
                       Column(
                         children: <Widget>[

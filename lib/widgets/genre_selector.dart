@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:searchable_dropdown/searchable_dropdown.dart';
+import 'package:strings/strings.dart' as Strings;
 
 import '../providers/genres.dart';
 
@@ -22,8 +23,9 @@ class GenreSelector extends StatelessWidget {
             items: genres.genres.map<DropdownMenuItem<String>>((String value) {
               return DropdownMenuItem<String>(
                 value: value,
-                child: Text(value.replaceRange(
-                    0, 1, value.substring(0, 1).toUpperCase())),
+                child: Text(Strings.camelize(value)),
+                // child: Text( value.replaceRange(
+                //     0, 1, value.substring(0, 1).toUpperCase())),
               );
             }).toList(),
             onChanged: (String newValue) {

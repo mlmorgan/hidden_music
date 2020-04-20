@@ -6,8 +6,9 @@ import 'package:flutter_swiper/flutter_swiper.dart';
 
 class ArtistsList extends StatelessWidget {
   final List<Artist> artists;
+  final SwiperController controller;
 
-  ArtistsList(this.artists);
+  ArtistsList(this.artists, this.controller);
 
   @override
   Widget build(BuildContext context) {
@@ -18,11 +19,8 @@ class ArtistsList extends StatelessWidget {
           artist: artists[index],
         );
       },
-      // pagination: SwiperPagination(
-      //   margin: EdgeInsets.all(10),
-      // ),
       loop: false,
-      //control: SwiperControl(),
+      controller: controller,
       viewportFraction: 0.8,
       scale: 0.9,
       physics: BouncingScrollPhysics(),
