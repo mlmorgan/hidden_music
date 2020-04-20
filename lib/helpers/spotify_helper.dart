@@ -31,8 +31,7 @@ class SpotifyHelper {
       if (images.length > 0) {
         image = artist['images'][0]['url'];
       } else {
-        image =
-            "https://via.placeholder.com/640x640.png?text=No+artist+image+found";
+        image = null;
       }
 
       return Artist(
