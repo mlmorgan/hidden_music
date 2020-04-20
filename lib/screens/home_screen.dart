@@ -31,10 +31,16 @@ class _HomeScreenState extends State<HomeScreen> {
       backgroundColor: Theme.of(context).backgroundColor,
       body: Column(
         children: <Widget>[
-          GenreSelector(getArtistsFnc: _getArtists),
+          Padding(
+            padding: const EdgeInsets.all(12.0),
+            child: GenreSelector(getArtistsFnc: _getArtists),
+          ),
           (_artists.length > 0)
               ? Expanded(
-                  child: ArtistsList(_artists),
+                  child: Padding(
+                    padding: const EdgeInsets.only(bottom: 12.0),
+                    child: ArtistsList(_artists),
+                  ),
                 )
               : Text("No artists found")
         ],

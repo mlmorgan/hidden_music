@@ -18,8 +18,8 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         title: 'Hidden Music',
         theme: ThemeData(
+          brightness: Brightness.dark,
           primarySwatch: Colors.purple,
-          backgroundColor: Color(0x121212),
         ),
         home: HomeScreen(),
       ),

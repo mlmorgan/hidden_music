@@ -11,10 +11,11 @@ import '../models/artist.dart';
 class SpotifyHelper {
   static Future<List<Artist>> getArtists(String genre) async {
     final random = new Random();
+    final limit = 50;
     final offset = 0; //random.nextInt(50);
     final accessToken = await _getAccessToken();
     final url =
-        'https://api.spotify.com/v1/search?q=genre%3A$genre%20tag%3Ahipster&type=artist&limit=10&offset=$offset';
+        'https://api.spotify.com/v1/search?q=genre%3A$genre%20tag%3Ahipster&type=artist&limit=$limit&offset=$offset';
 
     final response =
         await http.get(url, headers: {'Authorization': 'Bearer $accessToken'});
@@ -36,6 +37,7 @@ class SpotifyHelper {
 
       return Artist(
         name: artist['name'],
+        followers: artist['followers']['total'],
         imageURL: image,
         spotifyURL: artist['external_urls']['spotify'],
       );

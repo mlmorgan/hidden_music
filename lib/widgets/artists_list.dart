@@ -15,9 +15,7 @@ class ArtistsList extends StatelessWidget {
       itemCount: artists.length,
       itemBuilder: (BuildContext context, int index) {
         return ArtistTile(
-          name: artists[index].name,
-          imageURL: artists[index].imageURL,
-          spotifyURL: artists[index].spotifyURL,
+          artist: artists[index],
         );
       },
       // pagination: SwiperPagination(
