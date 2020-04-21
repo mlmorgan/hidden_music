@@ -49,24 +49,24 @@ class _HomeScreenState extends State<HomeScreen> {
           children: <Widget>[
             Padding(
               padding: const EdgeInsets.all(12.0),
-              child: Column(
-                children: <Widget>[
-                  GenreSelector(setGenreFunc: _setGenre),
-                  SwitchListTile.adaptive(
-                      value: _showPopular,
-                      title: Text('Show popular artists instead'),
-                      onChanged: (newValue) {
-                        setState(() {
-                          _showPopular = newValue;
-                        });
-                        _getArtists();
-                      })
-                ],
-              ),
+              child: GenreSelector(setGenreFunc: _setGenre),
             ),
             Expanded(
               child: (_artists.length > 0)
-                  ? ArtistsList(_artists, controller)
+                  ? Column(
+                      children: <Widget>[
+                        Expanded(child: ArtistsList(_artists, controller)),
+                        SwitchListTile.adaptive(
+                            value: _showPopular,
+                            title: Text('Show popular artists instead'),
+                            onChanged: (newValue) {
+                              setState(() {
+                                _showPopular = newValue;
+                              });
+                              _getArtists();
+                            }),
+                      ],
+                    )
                   : Column(
                       children: <Widget>[
                         Icon(
@@ -96,6 +96,7 @@ class _HomeScreenState extends State<HomeScreen> {
             //     ],
             //   ),
             // ),
+
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
