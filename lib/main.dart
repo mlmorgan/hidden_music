@@ -24,7 +24,7 @@ class MyApp extends StatelessWidget {
         title: 'Hidden Music',
         theme: ThemeData(
           brightness: Brightness.dark,
-          primarySwatch: Colors.purple,
+          //primarySwatch: Colors.purple,
         ),
         home: HomeScreen(),
       ),

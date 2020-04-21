@@ -6,6 +6,7 @@ import '../helpers/spotify_helper.dart';
 import '../widgets/genre_selector.dart';
 import '../widgets/artists_list.dart';
 import '../models/artist.dart';
+import '../widgets/info_dialog.dart';
 
 class HomeScreen extends StatefulWidget {
   HomeScreen() {}
@@ -29,19 +30,19 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Invisible Music'),
-      ),
-      backgroundColor: Theme.of(context).backgroundColor,
-      body: Column(
-        children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.all(12.0),
-            child: GenreSelector(getArtistsFnc: _getArtists),
-          ),
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.only(bottom: 12.0),
+      // appBar: AppBar(
+      //   title: Text('Invisible Music'),
+      //   actions: <Widget>[IconButton(icon: Icon(Icons.info), onPressed: () {})],
+      // ),
+      //backgroundColor: Theme.of(context).backgroundColor,
+      body: SafeArea(
+        child: Column(
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: GenreSelector(getArtistsFnc: _getArtists),
+            ),
+            Expanded(
               child: (_artists.length > 0)
                   ? ArtistsList(_artists, controller)
                   : Column(
@@ -59,8 +60,48 @@ class _HomeScreenState extends State<HomeScreen> {
                       ],
                     ),
             ),
-          )
-        ],
+            // Padding(
+            //   padding: const EdgeInsets.all(16.0),
+            //   child: Row(
+            //     mainAxisAlignment: MainAxisAlignment.center,
+            //     children: <Widget>[
+            //       Text('Data and artwork supplied by'),
+            //       SizedBox(width: 10),
+            //       Image.asset(
+            //         'assets/images/Spotify_Logo_RGB_White.png',
+            //         height: 30,
+            //       ),
+            //     ],
+            //   ),
+            // ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                IconButton(
+                  icon: Icon(Icons.info),
+                  onPressed: () {
+                    showAboutDialog(
+                      context: context,
+                      applicationName: 'Invisible Music',
+                      applicationVersion: '0.1',
+                      children: <Widget>[
+                        Text(
+                          'All artist data, imagery, and artwork, provided by the Spotify Web API',
+                          textAlign: TextAlign.center,
+                        ),
+                        SizedBox(height: 20),
+                        Image.asset(
+                          'assets/images/Spotify_Logo_RGB_Green.png',
+                          height: 30,
+                        ),
+                      ],
+                    );
+                  },
+                ),
+              ],
+            )
+          ],
+        ),
       ),
     );
   }
