@@ -6,9 +6,9 @@ import 'package:strings/strings.dart' as Strings;
 import '../providers/genres.dart';
 
 class GenreSelector extends StatelessWidget {
-  final getArtistsFnc;
+  final setGenreFunc;
 
-  GenreSelector({this.getArtistsFnc});
+  GenreSelector({this.setGenreFunc});
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +41,7 @@ class GenreSelector extends StatelessWidget {
                   onChanged: (String newValue) {
                     if (newValue != null) {
                       genres.setCurrentGenre(newValue);
-                      getArtistsFnc(genres.currentGenre);
+                      setGenreFunc(genres.currentGenre);
                     }
                   },
                   value: genres.currentGenre,

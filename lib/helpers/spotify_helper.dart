@@ -9,13 +9,14 @@ import '../models/access_token.dart';
 import '../models/artist.dart';
 
 class SpotifyHelper {
-  static Future<List<Artist>> getArtists(String genre) async {
+  static Future<List<Artist>> getArtists(String genre, bool showPopular) async {
     final random = new Random();
     final limit = 50;
+    final tag = showPopular ? '' : '%20tag%3Ahipster';
     final offset = 0; //random.nextInt(50);
     final accessToken = await _getAccessToken();
     final url =
-        'https://api.spotify.com/v1/search?q=genre%3A$genre%20tag%3Ahipster&type=artist&limit=$limit&offset=$offset';
+        'https://api.spotify.com/v1/search?q=genre%3A${genre + tag}&type=artist&limit=$limit&offset=$offset';
 
     final response =
         await http.get(url, headers: {'Authorization': 'Bearer $accessToken'});

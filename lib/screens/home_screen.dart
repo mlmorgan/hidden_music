@@ -17,14 +17,23 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   List<Artist> _artists = [];
+  var _showPopular = false;
+  var _genre;
   final controller = SwiperController();
-  void _getArtists(String genre) async {
+  void _getArtists() async {
     final artists = await SpotifyHelper.getArtists(
-        genre.toLowerCase().replaceAll(' ', '-'));
+        _genre.toLowerCase().replaceAll(' ', '-'), _showPopular);
     setState(() {
       _artists = artists;
-      controller.move(0);
     });
+    controller.move(0);
+  }
+
+  void _setGenre(String newGenre) {
+    setState(() {
+      _genre = newGenre;
+    });
+    _getArtists();
   }
 
   @override
@@ -40,7 +49,20 @@ class _HomeScreenState extends State<HomeScreen> {
           children: <Widget>[
             Padding(
               padding: const EdgeInsets.all(12.0),
-              child: GenreSelector(getArtistsFnc: _getArtists),
+              child: Column(
+                children: <Widget>[
+                  GenreSelector(setGenreFunc: _setGenre),
+                  SwitchListTile.adaptive(
+                      value: _showPopular,
+                      title: Text('Show popular artists instead'),
+                      onChanged: (newValue) {
+                        setState(() {
+                          _showPopular = newValue;
+                        });
+                        _getArtists();
+                      })
+                ],
+              ),
             ),
             Expanded(
               child: (_artists.length > 0)
@@ -84,17 +106,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       context: context,
                       applicationName: 'Invisible Music',
                       applicationVersion: '0.1',
-                      children: <Widget>[
-                        Text(
-                          'All artist data, imagery, and artwork, provided by the Spotify Web API',
-                          textAlign: TextAlign.center,
-                        ),
-                        SizedBox(height: 20),
-                        Image.asset(
-                          'assets/images/Spotify_Logo_RGB_Green.png',
-                          height: 30,
-                        ),
-                      ],
+                      children: <Widget>[InfoDialog()],
                     );
                   },
                 ),
