@@ -7,6 +7,7 @@ import '../widgets/genre_selector.dart';
 import '../widgets/artists_list.dart';
 import '../models/artist.dart';
 import '../widgets/info_dialog.dart';
+import '../widgets/no_artists_info.dart';
 
 class HomeScreen extends StatefulWidget {
   HomeScreen() {}
@@ -19,14 +20,20 @@ class _HomeScreenState extends State<HomeScreen> {
   List<Artist> _artists = [];
   var _showPopular = false;
   var _genre;
-  final controller = SwiperController();
+  var _isLoading = false;
+  final _controller = SwiperController();
+
   void _getArtists() async {
+    setState(() {
+      _isLoading = true;
+    });
     final artists = await SpotifyHelper.getArtists(
         _genre.toLowerCase().replaceAll(' ', '-'), _showPopular);
     setState(() {
+      _isLoading = false;
       _artists = artists;
     });
-    controller.move(0);
+    _controller.move(0);
   }
 
   void _setGenre(String newGenre) {
@@ -39,11 +46,21 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(
-      //   title: Text('Invisible Music'),
-      //   actions: <Widget>[IconButton(icon: Icon(Icons.info), onPressed: () {})],
-      // ),
-      //backgroundColor: Theme.of(context).backgroundColor,
+      appBar: AppBar(
+        title: Text('Browse Genres'),
+        actions: <Widget>[
+          IconButton(
+              icon: Icon(Icons.info),
+              onPressed: () {
+                showAboutDialog(
+                  context: context,
+                  applicationName: 'Hidden Music',
+                  applicationVersion: '0.1',
+                  children: <Widget>[InfoDialog()],
+                );
+              })
+        ],
+      ),
       body: SafeArea(
         child: Column(
           children: <Widget>[
@@ -52,70 +69,69 @@ class _HomeScreenState extends State<HomeScreen> {
               child: GenreSelector(setGenreFunc: _setGenre),
             ),
             Expanded(
-              child: (_artists.length > 0)
-                  ? Column(
-                      children: <Widget>[
-                        Expanded(child: ArtistsList(_artists, controller)),
-                        SwitchListTile.adaptive(
-                            value: _showPopular,
-                            title: Text('Show popular artists instead'),
-                            onChanged: (newValue) {
-                              setState(() {
-                                _showPopular = newValue;
-                              });
-                              _getArtists();
-                            }),
-                      ],
-                    )
-                  : Column(
-                      children: <Widget>[
-                        Icon(
-                          Icons.arrow_upward,
-                          color: Theme.of(context).accentColor,
-                          size: 100,
-                        ),
-                        Text(
-                          "No artists found.\nTry searching for a new genre.",
-                          style: TextStyle(fontSize: 20),
-                          textAlign: TextAlign.center,
-                        ),
-                      ],
-                    ),
+              child: (_isLoading)
+                  ? Center(child: CircularProgressIndicator())
+                  : (_artists.length == 0)
+                      ? NoArtistsInfo()
+                      : ArtistsList(_artists, _controller),
             ),
-            // Padding(
-            //   padding: const EdgeInsets.all(16.0),
-            //   child: Row(
-            //     mainAxisAlignment: MainAxisAlignment.center,
-            //     children: <Widget>[
-            //       Text('Data and artwork supplied by'),
-            //       SizedBox(width: 10),
-            //       Image.asset(
-            //         'assets/images/Spotify_Logo_RGB_White.png',
-            //         height: 30,
-            //       ),
-            //     ],
-            //   ),
-            // ),
-
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                IconButton(
-                  icon: Icon(Icons.info),
-                  onPressed: () {
-                    showAboutDialog(
-                      context: context,
-                      applicationName: 'Invisible Music',
-                      applicationVersion: '0.1',
-                      children: <Widget>[InfoDialog()],
-                    );
-                  },
-                ),
-              ],
-            )
+            (_genre != null)
+                ? SwitchListTile.adaptive(
+                    value: _showPopular,
+                    title: Text('Show popular artists instead'),
+                    onChanged: (_isLoading)
+                        ? null
+                        : (newValue) {
+                            setState(() {
+                              _showPopular = newValue;
+                            });
+                            _getArtists();
+                          })
+                : SizedBox()
+            // try adding switch after artistlist to see if bug still occurs to narrow down problem
           ],
         ),
       ),
     );
   }
 }
+
+// (_isLoading)
+//                 ? Expanded(
+//                     child: Center(
+//                       child: CircularProgressIndicator(),
+//                     ),
+//                   )
+//                 : Expanded(
+//                     child: Column(
+//                       children: <Widget>[
+//                         Expanded(
+//                           child: (_artists.length == 0)
+//                               ? Column(
+//                                   children: <Widget>[
+//                                     Icon(
+//                                       Icons.arrow_upward,
+//                                       color: Theme.of(context).accentColor,
+//                                       size: 100,
+//                                     ),
+//                                     Text(
+//                                       "No artists found.\nTry searching for a new genre.",
+//                                       style: TextStyle(fontSize: 20),
+//                                       textAlign: TextAlign.center,
+//                                     ),
+//                                   ],
+//                                 )
+//                               : ArtistsList(_artists, _controller),
+//                         ),
+//                         SwitchListTile.adaptive(
+//                             value: _showPopular,
+//                             title: Text('Show popular artists instead'),
+//                             onChanged: (newValue) {
+//                               setState(() {
+//                                 _showPopular = newValue;
+//                               });
+//                               _getArtists();
+//                             }),
+//                       ],
+//                     ),
+//                   ),
