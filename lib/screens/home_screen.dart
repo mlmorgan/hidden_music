@@ -8,6 +8,7 @@ import '../widgets/artists_list.dart';
 import '../models/artist.dart';
 import '../widgets/info_dialog.dart';
 import '../widgets/no_artists_info.dart';
+import 'package:loading_overlay/loading_overlay.dart';
 
 class HomeScreen extends StatefulWidget {
   HomeScreen() {}
@@ -62,76 +63,40 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
       ),
       body: SafeArea(
-        child: Column(
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.all(12.0),
-              child: GenreSelector(setGenreFunc: _setGenre),
-            ),
-            Expanded(
-              child: (_isLoading)
-                  ? Center(child: CircularProgressIndicator())
-                  : (_artists.length == 0)
-                      ? NoArtistsInfo()
-                      : ArtistsList(_artists, _controller),
-            ),
-            (_genre != null)
-                ? SwitchListTile.adaptive(
-                    value: _showPopular,
-                    title: Text('Show popular artists instead'),
-                    onChanged: (_isLoading)
-                        ? null
-                        : (newValue) {
-                            setState(() {
-                              _showPopular = newValue;
-                            });
-                            _getArtists();
-                          })
-                : SizedBox()
-            // try adding switch after artistlist to see if bug still occurs to narrow down problem
-          ],
+        child: LoadingOverlay(
+          isLoading: _isLoading,
+          child: Column(
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.all(12.0),
+                child: GenreSelector(setGenreFunc: _setGenre),
+              ),
+              Expanded(
+                child: Column(
+                  children: <Widget>[
+                    Expanded(
+                      child: (_artists.length == 0)
+                          ? NoArtistsInfo()
+                          : ArtistsList(_artists, _controller),
+                    ),
+                    (_genre != null)
+                        ? SwitchListTile.adaptive(
+                            value: _showPopular,
+                            title: Text('Show popular artists instead'),
+                            onChanged: (newValue) {
+                              setState(() {
+                                _showPopular = newValue;
+                              });
+                              _getArtists();
+                            })
+                        : SizedBox()
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
 }
-
-// (_isLoading)
-//                 ? Expanded(
-//                     child: Center(
-//                       child: CircularProgressIndicator(),
-//                     ),
-//                   )
-//                 : Expanded(
-//                     child: Column(
-//                       children: <Widget>[
-//                         Expanded(
-//                           child: (_artists.length == 0)
-//                               ? Column(
-//                                   children: <Widget>[
-//                                     Icon(
-//                                       Icons.arrow_upward,
-//                                       color: Theme.of(context).accentColor,
-//                                       size: 100,
-//                                     ),
-//                                     Text(
-//                                       "No artists found.\nTry searching for a new genre.",
-//                                       style: TextStyle(fontSize: 20),
-//                                       textAlign: TextAlign.center,
-//                                     ),
-//                                   ],
-//                                 )
-//                               : ArtistsList(_artists, _controller),
-//                         ),
-//                         SwitchListTile.adaptive(
-//                             value: _showPopular,
-//                             title: Text('Show popular artists instead'),
-//                             onChanged: (newValue) {
-//                               setState(() {
-//                                 _showPopular = newValue;
-//                               });
-//                               _getArtists();
-//                             }),
-//                       ],
-//                     ),
-//                   ),
