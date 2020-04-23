@@ -29,78 +29,90 @@ class ArtistTile extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              Container(
-                height: 320,
-                width: double.infinity,
+              Expanded(
+                //height: 160,
+                //width: double.infinity,
                 child: artist.imageURL == null
-                    ? Icon(
-                        Icons.account_circle,
-                        size: 160,
+                    ? Container(
+                        width: double.infinity,
+                        color: Theme.of(context).backgroundColor,
+                        child: Icon(
+                          Icons.account_circle,
+                          size: 160,
+                        ),
                       )
-                    : Image.network(
-                        artist.imageURL,
-                        fit: BoxFit.cover,
-                        loadingBuilder: (BuildContext context, Widget child,
-                            ImageChunkEvent loadingProgress) {
-                          if (loadingProgress == null) return child;
-                          return Center(
-                            child: CircularProgressIndicator(
-                              value: loadingProgress.expectedTotalBytes != null
-                                  ? loadingProgress.cumulativeBytesLoaded /
-                                      loadingProgress.expectedTotalBytes
-                                  : null,
-                            ),
-                          );
-                        },
+                    : Container(
+                        width: double.infinity,
+                        child: Image.network(
+                          artist.imageURL,
+                          fit: BoxFit.cover,
+                          loadingBuilder: (BuildContext context, Widget child,
+                              ImageChunkEvent loadingProgress) {
+                            if (loadingProgress == null) return child;
+                            return Center(
+                              child: CircularProgressIndicator(
+                                value: loadingProgress.expectedTotalBytes !=
+                                        null
+                                    ? loadingProgress.cumulativeBytesLoaded /
+                                        loadingProgress.expectedTotalBytes
+                                    : null,
+                              ),
+                            );
+                          },
+                        ),
                       ),
               ),
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Text(
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: <Widget>[
+                    FittedBox(
+                      child: Text(
                         artist.name,
                         maxLines: 2,
                         overflow: TextOverflow.fade,
                         style: TextStyle(
-                          fontSize: 40,
+                          fontSize: 50,
                           fontWeight: FontWeight.bold,
                         ),
                         textAlign: TextAlign.center,
                       ),
-                      Column(
-                        children: <Widget>[
-                          Text(
-                            artist.followers.toString(),
-                            style: TextStyle(
-                              fontSize: 30,
-                              fontWeight: FontWeight.bold,
-                            ),
+                    ),
+                    Divider(),
+                    Column(
+                      children: <Widget>[
+                        Text(
+                          artist.followers.toString(),
+                          style: TextStyle(
+                            fontSize: 40,
+                            fontWeight: FontWeight.bold,
                           ),
-                          Text(
-                            'Followers',
-                            style: TextStyle(
-                              fontSize: 20,
-                            ),
-                          ),
-                        ],
-                      ),
-                      RaisedButton(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(30),
                         ),
-                        onPressed: _launchSpotify,
+                        Text(
+                          'Followers',
+                          style: TextStyle(
+                            fontSize: 18,
+                          ),
+                        ),
+                      ],
+                    ),
+                    Divider(),
+                    RaisedButton(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                      onPressed: _launchSpotify,
+                      child: FittedBox(
                         child: Text(
                           'OPEN IN SPOTIFY',
-                          style: TextStyle(fontSize: 15),
+                          style: TextStyle(fontSize: 18),
                         ),
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 16, horizontal: 64),
                       ),
-                    ],
-                  ),
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 16, horizontal: 56),
+                    ),
+                  ],
                 ),
               ),
             ],

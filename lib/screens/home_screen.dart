@@ -47,21 +47,21 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Browse Genres'),
-        actions: <Widget>[
-          IconButton(
-              icon: Icon(Icons.info),
-              onPressed: () {
-                showAboutDialog(
-                  context: context,
-                  applicationName: 'Hidden Music',
-                  applicationVersion: '0.1',
-                  children: <Widget>[InfoDialog()],
-                );
-              })
-        ],
-      ),
+      // appBar: AppBar(
+      //   title: Text('Hidden Music'),
+      //   actions: <Widget>[
+      //     IconButton(
+      //         icon: Icon(Icons.info),
+      //         onPressed: () {
+      //           showAboutDialog(
+      //             context: context,
+      //             applicationName: 'Hidden Music',
+      //             applicationVersion: '0.1',
+      //             children: <Widget>[InfoDialog()],
+      //           );
+      //         })
+      //   ],
+      // ),
       body: SafeArea(
         child: LoadingOverlay(
           isLoading: _isLoading,
@@ -79,17 +79,34 @@ class _HomeScreenState extends State<HomeScreen> {
                           ? NoArtistsInfo()
                           : ArtistsList(_artists, _controller),
                     ),
-                    (_genre != null)
-                        ? SwitchListTile.adaptive(
-                            value: _showPopular,
-                            title: Text('Show popular artists instead'),
-                            onChanged: (newValue) {
-                              setState(() {
-                                _showPopular = newValue;
-                              });
-                              _getArtists();
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: <Widget>[
+                        (_genre != null)
+                            ? Expanded(
+                                child: SwitchListTile.adaptive(
+                                    value: _showPopular,
+                                    title: Text('Show popular artists instead'),
+                                    onChanged: (newValue) {
+                                      setState(() {
+                                        _showPopular = newValue;
+                                      });
+                                      _getArtists();
+                                    }),
+                              )
+                            : SizedBox(),
+                        IconButton(
+                            icon: Icon(Icons.info),
+                            onPressed: () {
+                              showAboutDialog(
+                                context: context,
+                                applicationName: 'Hidden Music',
+                                applicationVersion: '0.1',
+                                children: <Widget>[InfoDialog()],
+                              );
                             })
-                        : SizedBox()
+                      ],
+                    ),
                   ],
                 ),
               ),
