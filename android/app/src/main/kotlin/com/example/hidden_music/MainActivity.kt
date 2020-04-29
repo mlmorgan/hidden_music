@@ -1,4 +1,4 @@
-package com.example.music_underground
+package com.mlmorgan.music_underground
 
 import androidx.annotation.NonNull;
 import io.flutter.embedding.android.FlutterActivity

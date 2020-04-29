@@ -102,8 +102,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 child: Builder(builder: (BuildContext context) {
                                   return SwitchListTile.adaptive(
                                       value: _showPopular,
-                                      title:
-                                          Text('Show popular artists instead'),
+                                      title: Text('Show most popular instead'),
                                       onChanged: (newValue) {
                                         setState(() {
                                           _showPopular = newValue;
@@ -119,7 +118,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               showAboutDialog(
                                 context: context,
                                 applicationName: 'Hidden Music',
-                                applicationVersion: '0.1',
+                                applicationVersion: '1.0.0',
                                 children: <Widget>[InfoDialog()],
                               );
                             })
