@@ -20,6 +20,11 @@ class SpotifyHelper {
 
     final response =
         await http.get(url, headers: {'Authorization': 'Bearer $accessToken'});
+
+    if (response.statusCode != 200) {
+      throw ('Error fetching artists');
+    }
+
     print('Response status: ${response.statusCode}');
     print('Response body: ${response.body}');
 

@@ -16,7 +16,7 @@ class InfoDialog extends StatelessWidget {
     return Column(
       children: <Widget>[
         Text(
-          'All artist data, imagery, and artwork, provided by the Spotify Web API',
+          'All artist data, imagery, and artwork, provided by the Spotify Web API\n\nBase app icon made by Freepik from www.flaticon.com',
           textAlign: TextAlign.center,
         ),
         SizedBox(height: 20),

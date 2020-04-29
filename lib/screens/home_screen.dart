@@ -24,24 +24,39 @@ class _HomeScreenState extends State<HomeScreen> {
   var _isLoading = false;
   final _controller = SwiperController();
 
-  void _getArtists() async {
+  void _getArtists(BuildContext context) async {
     setState(() {
       _isLoading = true;
     });
-    final artists = await SpotifyHelper.getArtists(
-        _genre.toLowerCase().replaceAll(' ', '-'), _showPopular);
+    try {
+      final artists = await SpotifyHelper.getArtists(
+          _genre.toLowerCase().replaceAll(' ', '-'), _showPopular);
+      setState(() {
+        _artists = artists;
+      });
+      _controller.move(0);
+    } catch (e) {
+      Scaffold.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Unable to fetch artists'),
+          action: SnackBarAction(
+              label: 'OK',
+              onPressed: () {
+                Scaffold.of(context).hideCurrentSnackBar();
+              }),
+        ),
+      );
+    }
     setState(() {
       _isLoading = false;
-      _artists = artists;
     });
-    _controller.move(0);
   }
 
-  void _setGenre(String newGenre) {
+  void _setGenre(String newGenre, BuildContext context) {
     setState(() {
       _genre = newGenre;
     });
-    _getArtists();
+    _getArtists(context);
   }
 
   @override
@@ -84,15 +99,18 @@ class _HomeScreenState extends State<HomeScreen> {
                       children: <Widget>[
                         (_genre != null)
                             ? Expanded(
-                                child: SwitchListTile.adaptive(
-                                    value: _showPopular,
-                                    title: Text('Show popular artists instead'),
-                                    onChanged: (newValue) {
-                                      setState(() {
-                                        _showPopular = newValue;
+                                child: Builder(builder: (BuildContext context) {
+                                  return SwitchListTile.adaptive(
+                                      value: _showPopular,
+                                      title:
+                                          Text('Show popular artists instead'),
+                                      onChanged: (newValue) {
+                                        setState(() {
+                                          _showPopular = newValue;
+                                        });
+                                        _getArtists(context);
                                       });
-                                      _getArtists();
-                                    }),
+                                }),
                               )
                             : SizedBox(),
                         IconButton(

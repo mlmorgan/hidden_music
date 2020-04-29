@@ -1,4 +1,4 @@
-name: hidden_music
+name: music_underground
 description: A new Flutter project.
 
 # The following defines the version and build number for your application.
@@ -35,6 +35,14 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  flutter_launcher_icons: ^0.7.5
+
+flutter_icons:
+  android: true
+  ios: false
+  image_path: "dev_assets/icon.png"
+  # adaptive_icon_background: "#00abc2"
+  # adaptive_icon_foreground: "dev_assets/adaptive-icon.png"
 
 
 # For information on the generic Dart part of this file, see the

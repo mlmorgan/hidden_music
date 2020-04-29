@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
         ),
       ],
       child: MaterialApp(
-        title: 'Hidden Music',
+        title: 'Music Underground',
         theme: ThemeData(
           brightness: Brightness.dark,
           //primarySwatch: Colors.purple,

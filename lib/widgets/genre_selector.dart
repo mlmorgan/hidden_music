@@ -41,7 +41,7 @@ class GenreSelector extends StatelessWidget {
                   onChanged: (String newValue) {
                     if (newValue != null) {
                       genres.setCurrentGenre(newValue);
-                      setGenreFunc(genres.currentGenre);
+                      setGenreFunc(genres.currentGenre, context);
                     }
                   },
                   value: genres.currentGenre,

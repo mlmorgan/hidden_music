@@ -1,4 +1,4 @@
-# hidden_music
+# Music Underground
 
 A new Flutter project.
 
